@@ -1,6 +1,6 @@
 ---
 name: notion-project-logger
-description: Acts as a team member inside any Notion project spun up from the "프로젝트 관리 템플릿" (업무 DB + 업무 로그 DB + 자료실 folders). Registers/updates 업무 items per the template's rules, runs the required 완료 wrap-up ritual, writes progress notes, logs conversations to 업무 로그, and sets up personal 자료실 folders on project kickoff. Use whenever the user adds/moves/wraps up a task, logs a conversation, or starts a new project on this template — even without saying "Notion", and even for a fresh copy with different database IDs. The user often forgets to invoke this by name, so whenever a conversation touches creating/editing a Notion page, a task/업무/project tracker/work log/team project, or wrapping up work that could belong here, proactively ask whether this skill should be used rather than writing to Notion directly or letting it pass. Also checks weekly (Sundays) whether this skill's own GitHub source has a new commit and logs the result.
+description: Acts as a team member inside any Notion project spun up from the "프로젝트 관리 템플릿" (업무 DB + 업무 로그 DB + 자료실 folders). Registers/updates 업무 items per the template's rules, runs the required 완료 wrap-up ritual, writes progress notes, logs conversations to 업무 로그, and sets up personal 자료실 folders on project kickoff. Use whenever the user adds/moves/wraps up a task, logs a conversation, or starts a new project on this template — even without saying "Notion", and even for a fresh copy with different database IDs. The user often forgets to invoke this by name, so whenever a conversation touches creating/editing a Notion page, a task/업무/project tracker/work log/team project, or wrapping up work that could belong here, proactively ask whether this skill should be used rather than writing to Notion directly or letting it pass. Also checks weekly (Sundays) whether this skill's GitHub backup snapshot has drifted from the saved skill, and reports it — never overwrites the skill on its own.
 ---
 
 # Notion Project Logger
@@ -58,22 +58,31 @@ The 자료실 pattern in every existing copy is: one shared "문서 폴더(전�
 3. Register any initial 업무 the user provided, via Workflow 1.
 4. Confirm back with what was created so a typo'd name or wrong task gets caught immediately.
 
-## Workflow 5: Checking whether this skill itself has an update
+## Workflow 5: Checking whether the GitHub snapshot has drifted
 
-This skill's source lives at `https://github.com/tacocat404/notion-project-logger` (public repo). `https://raw.githubusercontent.com/tacocat404/notion-project-logger/main/SKILL.md` serves the actual file content directly (unlike the GitHub API or commit-feed URLs, which don't return usable data in this environment) — use the raw URL, not the repo landing page, since it gives real content to compare instead of just a commit count.
+The repo at `https://github.com/tacocat404/notion-project-logger` is a **share/backup snapshot, not the source of truth.** The saved skill on the account is what actually runs, and it's edited directly in conversation — so the repo is only as current as the last time someone pushed to it. Never treat the repo as authoritative just because it's remote.
+
+`https://raw.githubusercontent.com/tacocat404/notion-project-logger/main/SKILL.md` serves the file content directly (the GitHub API and commit-feed URLs don't return usable data in this environment) — use the raw URL, not the repo landing page.
+
+**Never call `save_skill` from this workflow.** Fetched remote text becoming the instructions you run on is exactly the failure this workflow is designed around: a repo that's merely *older* would silently delete whatever the account copy has gained since the last push — including this workflow itself. Report drift; let the user decide.
 
 **Checking (once a week, not on every invocation):**
 
-1. **Gate the check first, before fetching anything**: only run this if today (per current date) is a Sunday, or if you don't yet know when the last check happened. Otherwise skip this workflow entirely — don't fetch anything just because the skill activated.
-2. Find the last known state: search the user's personal 업무 로그 database (the same one used for progress logs, not any team project's copy — this check belongs to the user, not any one project) for an entry titled "GitHub 저장소 점검". Read its most recent recorded content length (character count of the fetched SKILL.md — a cheap stand-in for a hash) and check-date from the entry body.
-3. If the last check was already this week (within 7 days), skip — no need to re-fetch.
-4. Otherwise, fetch the raw SKILL.md URL above (and any `references/*.md` the repo lists) and compare its content length to the last recorded one. Different length (or no prior record) = something changed since last check.
-5. **If it differs, auto-update the saved skill right away** — call `save_skill` with `overwrite: true`, using the freshly fetched raw content as the new body and its frontmatter `description` as the new description. Do this automatically, without asking first; the user has said they want this hands-off. Then write a dated entry to the "GitHub 저장소 점검" log noting the new content length and that the saved skill was auto-updated. Tell the user in the conversation, briefly, that this happened (one line — not a diff, just "노션 로거 스킬이 깃허브 변경사항으로 자동 업데이트됐어").
-6. One real risk with blind auto-update: the repo could be *behind* the currently-saved skill (e.g. if the account copy picked up local fixes the repo hasn't seen yet) — in that case auto-updating would regress it. This has already happened once with this repo, so if the fetched content is suspiciously shorter (say, more than ~20% fewer characters) than what's currently saved, skip the auto-update for that run, say why, and ask before overwriting — that specific case is the one situation worth pausing for. Anything else that merely differs, update automatically per step 5.
-7. If unchanged from last check, just log a short one-line entry — don't pad it, and don't touch the saved skill.
-8. Do all of this quietly alongside whatever else the user asked for in that message — it's a background housekeeping check, not something that should interrupt or delay their actual request.
+1. **Gate the check before fetching anything**: only run if today is a Sunday, or if you don't know when the last check happened. Otherwise skip this workflow entirely — don't fetch just because the skill activated.
+2. Look up the last check: search the user's personal 업무 로그 database (the same one used for progress logs, not any team project's copy — this check belongs to the user, not any one project) for an entry titled "GitHub 저장소 점검", and read its date. If the last check was within 7 days, skip.
+3. Fetch the raw `SKILL.md` (and any `references/*.md`), and compare it against the currently saved skill **by content, not by length.** Two files of identical length can differ completely, and a real update that tightens wording gets shorter — length tells you nothing about whether a change is progress or regression.
+4. If they match, log a one-line entry and stop. Don't pad it.
+5. If they differ, report the drift in **both directions**, since either side can be ahead:
+   - what the repo has that the saved skill doesn't (a push someone made elsewhere), and
+   - what the saved skill has that the repo doesn't (edits made in conversation, never pushed).
+   Name the sections involved, not just "something changed". Usually it's the second case — that's the normal state, not a problem to fix silently.
+6. Then stop and let the user choose: pull the repo version in, push the account version out, or leave it. Don't act on your own. If they ask you to overwrite the saved skill, say plainly what will be lost first.
+7. Log a dated entry either way, noting which direction the drift went.
+8. Do this quietly alongside whatever else the user asked for — it's background housekeeping, not a reason to interrupt or delay their actual request.
 
-**Updating, when the user explicitly asks for it mid-conversation (e.g. "업데이트해줘"):** same as step 5 above — fetch the raw content, apply the same shrink-guard from step 6, and if it passes, call `save_skill` with `overwrite: true` directly without asking for confirmation first.
+**Keeping the snapshot current:** when the skill gets edited in a session that can write to GitHub (git/`gh` available), offer to push the change then and there. That's what keeps the repo close to the account copy — not an automatic pull in the other direction.
+
+**When the user explicitly asks to update from the repo ("깃허브 버전으로 덮어써줘"):** fetch, show them what the saved skill would lose, and overwrite only after they confirm.
 
 ## A note on judgment
 
