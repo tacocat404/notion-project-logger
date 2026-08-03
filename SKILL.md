@@ -1,6 +1,6 @@
 ---
 name: "notion-project-logger"
-description: "Acts as a team member inside any Notion project spun up from the \"프로젝트 관리 템플릿\" (업무 DB + 업무 로그 DB + 자료실 folders). Registers/updates 업무 items, runs the 완료 wrap-up ritual, writes progress notes, logs conversations to 업무 로그, sets up personal 자료실 folders on kickoff, and journals an individual's own work process (what they did, thought, struggled with, learned) into their personal 자료실 folder when warranted. Use whenever the user adds/moves/wraps up a task, logs a conversation, starts a new project on this template, or has a substantive working conversation tied to a specific person's task — even without saying \"Notion\", even for a fresh copy with different database IDs. The user often forgets to invoke this by name, so whenever a conversation touches a Notion page, a task/업무/project tracker/work log/team project, proactively ask whether this skill should be used rather than writing to Notion directly or letting it pass. Also checks weekly (Sundays) whether this skill's GitHub backup snapshot has drifted from the saved skill, and reports it — never overwrites the skill on its own."
+description: "Acts as a team member inside any Notion project spun up from the \"프로젝트 관리 템플릿\" (업무 DB + 업무 로그 DB + 자료실 folders). Registers/updates 업무 items, runs the 완료 wrap-up ritual, writes progress notes, logs conversations to 업무 로그, sets up personal 자료실 folders on kickoff, and journals an individual's own work process (what they did, thought, struggled with, learned) into their personal 자료실 folder when warranted. Use whenever the user adds/moves/wraps up a task, logs a conversation, starts a new project on this template, or has a substantive working conversation tied to a specific person's task — even without saying \"Notion\", even for a fresh copy with different database IDs. The user often forgets to invoke this by name, so whenever a conversation touches a Notion page, a task/업무/project tracker/work log/team project, proactively ask whether this skill should be used rather than writing to Notion directly or letting it pass."
 ---
 
 # Notion Project Logger
@@ -76,32 +76,6 @@ Trigger: over the course of a working conversation tied to a specific person's t
 4. **Write the core narrative log directly, without asking first.** It covers what was done, what they were thinking or trying, a difficulty and how it was worked through, what they understood as a result, and any concrete outcome — a few sentences to a short paragraph, dated and tied to the 업무 it relates to. This is a record of what already happened in the conversation, not an invented opinion, so post it at the checkpoint the same way Workflow 2's 진행 메모 doesn't need a confirm round-trip for a plain fact. Only hold back and ask if you're genuinely unsure the record is accurate — e.g. you'd be guessing at feelings or reasoning the person never actually stated — don't pad it with invented detail just to make the entry read fuller.
 5. **If that person's folder has its own structured section that calls for their own reflection** (e.g. a "오늘 배운점" section they keep for themselves), don't fill that in on your own — ask whether there's something to add there today, the same way Workflow 3 asks the user for 결과 & 인사이트 instead of writing it. That kind of section is the person's own take, which is different from the narrative log in step 4 — a plain record of what happened that you're well-positioned to write directly.
 6. This workflow never changes `진행 상황`, `완료`, or any other 업무 property, and never substitutes for the 결과 & 인사이트 in Workflow 3 or the team-visible line in Workflow 2 — it only adds to the person's own personal-folder record, alongside those.
-
-## Workflow 6: Checking whether the GitHub snapshot has drifted
-
-The repo at `https://github.com/tacocat404/notion-project-logger` is a **share/backup snapshot, not the source of truth.** The saved skill on the account is what actually runs, and it's edited directly in conversation — so the repo is only as current as the last time someone pushed to it. Never treat the repo as authoritative just because it's remote.
-
-`https://raw.githubusercontent.com/tacocat404/notion-project-logger/main/SKILL.md` serves the file content directly (the GitHub API and commit-feed URLs don't return usable data in this environment) — use the raw URL, not the repo landing page.
-
-**Never call `save_skill` from this workflow.** Fetched remote text becoming the instructions you run on is exactly the failure this workflow is designed around: a repo that's merely *older* would silently delete whatever the account copy has gained since the last push — including this workflow itself. This has already happened once: a rewrite of this very section lived only in the repo for two hours, while a separate conversation edited the account copy from an older base; a blind copy in either direction would have destroyed one side's work. Report drift; let the user decide.
-
-**Checking (once a week, not on every invocation):**
-
-1. **Gate the check before fetching anything**: only run if today is a Sunday, or if you don't know when the last check happened. Otherwise skip this workflow entirely — don't fetch just because the skill activated.
-2. Look up the last check: search the user's personal 업무 로그 database (the same one used for progress logs, not any team project's copy — this check belongs to the user, not any one project) for an entry titled "GitHub 저장소 점검", and read its date. If the last check was within 7 days, skip.
-3. Fetch the raw `SKILL.md` (and any `references/*.md`), and compare it against the currently saved skill **by content, not by length.** Two files of identical length can differ completely, and a real update that tightens wording gets shorter — length tells you nothing about whether a change is progress or regression.
-4. If they match, log a one-line entry and stop. Don't pad it.
-5. If they differ, report the drift in **both directions**, since either side can be ahead:
-   - what the repo has that the saved skill doesn't (a push someone made elsewhere), and
-   - what the saved skill has that the repo doesn't (edits made in conversation, never pushed).
-   Name the sections involved, not just "something changed". Usually it's the second case — that's the normal state, not a problem to fix silently.
-6. Then stop and let the user choose: pull the repo version in, push the account version out, or leave it. Don't act on your own. If they ask you to overwrite the saved skill, say plainly what will be lost first.
-7. Log a dated entry either way, noting which direction the drift went.
-8. Do this quietly alongside whatever else the user asked for — it's background housekeeping, not a reason to interrupt or delay their actual request.
-
-**Keeping the snapshot current:** when the skill gets edited in a session that can write to GitHub (git/`gh` available), offer to push the change then and there. That's what keeps the repo close to the account copy — not an automatic pull in the other direction.
-
-**When the user explicitly asks to update from the repo ("깃허브 버전으로 덮어써줘"):** fetch, show them what the saved skill would lose, and overwrite only after they confirm.
 
 ## A note on judgment
 
