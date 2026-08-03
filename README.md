@@ -69,6 +69,7 @@ git clone https://github.com/tacocat404/notion-project-logger.git
 notion-project-logger/
 ├── SKILL.md                        스킬 정의 — 이름, 실행 조건, 워크플로 1~6
 ├── README.md
+├── LICENSE
 └── references/
     ├── notion-schema.md            템플릿 공통 속성/타입 구조 (ID는 자리표시자)
     └── template-rules.md           공식 가이드 규칙 요약 — 대비용
@@ -85,3 +86,9 @@ Claude 스킬은 **재사용 가능한 작업 매뉴얼**에 가깝고, 필요�
 여섯 개 워크플로는 한 번에 나오지 않았고, 실제 워크스페이스에서 업무를 등록하고 수정하고 보류했다가 재개하고 완료 처리하는 흐름을 돌려보며 다듬었습니다. 그 중 가장 크게 뒤집은 것이 Workflow 6입니다. 처음에는 GitHub 내용으로 스킬을 **자동 갱신**하게 해두었는데, 저장소가 뒤처져 있을 때 새로 만든 기능을 그대로 지워버릴 뻔했습니다. 그 뒤로 자동 덮어쓰기를 걷어내고 차이를 보여주기만 하도록 바꿨습니다. (위 [이 저장소의 위치](#이-저장소의-위치) 참고)
 
 전체 과정과 설계 판단은 블로그에 정리했습니다 → [Claude Skills 입문](https://tacocat-blog-xpsx.vercel.app/study/claude-skills-intro/)
+
+## 라이선스
+
+[MIT](LICENSE)
+
+가져다 쓰셔도 되고, 고쳐 쓰셔도 됩니다. 다만 `references/notion-schema.md`의 ID는 전부 자리표시자이니, 본인 프로젝트의 실제 값으로 조회해서 쓰세요.
