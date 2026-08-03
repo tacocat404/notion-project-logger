@@ -1,32 +1,33 @@
 # notion-project-logger
 
-A Claude skill that acts like a team member inside a Notion project built from a specific "프로젝트 관리 템플릿" (project management template) — one 업무(task) database, one 업무 로그(work log) database, and a 자료실(resource room) folder structure.
+Notion "프로젝트 관리 템플릿"으로 만든 프로젝트 안에서, 팀원처럼 일해주는 Claude 스킬입니다. 이 템플릿은 업무 데이터베이스 하나, 업무 로그 데이터베이스 하나, 그리고 자료실 폴더 구조로 이루어져 있습니다.
 
-## What it does
+## 무엇을 하나요
 
-- **Registers tasks** (업무) with the required properties the template's official guide demands — verb-form names, 진행 상황(status), 날짜(date) — and asks rather than silently defaulting or guessing when a value is missing or ambiguous.
-- **Tracks progress**, distinguishing three different kinds of "update" the template treats differently: a private task journal entry (진행 메모), a status change (진행 상황), and a team-visible log entry (업무 로그) linked back to the task it concerns.
-- **Runs the task completion ritual** the guide calls "제일 중요" (most important): write the result & insight, file any output doc in the correct shared folder, move status to done, check the checkbox — all four steps, in order.
-- **Sets up new projects**, creating per-teammate personal folders and seeding initial tasks when a new copy of the template is kicked off.
+- **업무를 등록합니다.** 템플릿의 공식 가이드가 요구하는 항목들 — 동사형 이름, 진행 상황, 날짜 — 을 갖춰서 만듭니다. 값이 비어 있거나 애매하면 조용히 기본값을 넣거나 추측하지 않고 물어봅니다.
+- **진행 상황을 추적합니다.** 템플릿이 서로 다르게 취급하는 세 가지 "업데이트"를 구분합니다: 그 업무에만 남기는 개인 기록(진행 메모), 상태 변경(진행 상황), 그리고 팀 전체가 보는 기록(업무 로그, 해당 업무에 연결).
+- **완료 의식을 빠짐없이 수행합니다.** 가이드가 "제일 중요"하다고 못 박은 절차입니다. 결과 & 인사이트 작성 → 산출물을 알맞은 공용 폴더에 정리 → 진행 상황을 완료로 변경 → 완료 체크박스 — 네 단계를 순서대로 모두 수행합니다.
+- **새 프로젝트를 세팅합니다.** 템플릿을 새로 복제해 프로젝트를 시작할 때, 팀원별 개인 폴더를 만들고 초기 업무를 등록합니다.
 
-## Why it's built this way
+## 왜 이렇게 만들었나
 
-The template gets copied for every new project, and each copy gets its own database IDs. So the skill never hardcodes a data source ID — it looks up the current project's actual database and, critically, **fetches and reads that project's own guide page every time** rather than relying on a cached summary, since teams can and do adapt the guide as they go.
+이 템플릿은 새 프로젝트마다 복제되고, 복제본마다 데이터베이스 ID가 새로 생깁니다. 그래서 이 스킬은 데이터 소스 ID를 절대 하드코딩하지 않고, 그때그때 해당 프로젝트의 실제 데이터베이스를 찾아봅니다. 그리고 중요한 점 하나 — **매번 그 프로젝트의 가이드 페이지를 직접 읽습니다.** 요약본을 캐시해두고 쓰지 않는 이유는, 팀이 진행하면서 가이드를 고칠 수 있고 실제로 고치기 때문입니다.
 
-It also draws a hard line around anything that's a personal judgment call: results & insights, task retrospectives, and the contents of someone's personal folder are never fabricated by the skill — it drafts a starting point at most, and always gets the person's own sign-off before writing it into Notion as their voice.
+개인의 판단이 들어가는 영역에는 확실히 선을 그었습니다. 결과 & 인사이트, 업무 회고, 개인 폴더의 내용은 스킬이 지어내지 않습니다. 초안을 제안하는 선까지만 하고, 그 사람의 목소리로 Notion에 기록하기 전에 반드시 본인 확인을 받습니다.
 
-## Files
+## 파일 구성
 
-- `SKILL.md` — the skill definition Claude loads (name, trigger description, and the four workflows above).
-- `references/notion-schema.md` — the property/type shape shared by every copy of the template, with placeholder IDs (each project's real ones are looked up at runtime).
-- `references/template-rules.md` — a distilled fallback summary of the official guide's rules, used only if a project's live guide page can't be found.
+- `SKILL.md` — Claude가 읽어들이는 스킬 정의(이름, 실행 조건, 위 네 가지 워크플로).
+- `references/notion-schema.md` — 템플릿 복제본이 공통으로 갖는 속성/타입 구조. ID는 자리표시자이며, 실제 값은 실행 시점에 조회합니다.
+- `references/template-rules.md` — 공식 가이드의 규칙을 정리한 대비용 요약본. 프로젝트의 실제 가이드 페이지를 찾을 수 없을 때만 사용합니다.
 
-## Origin
+## 만들게 된 계기
 
-Built and tested iteratively in a real Notion workspace (registering, updating, holding, resuming, and completing an actual task end-to-end) as a learning exercise in how Claude skills are structured and refined. Written up as part of that process — see the accompanying blog post for the design decisions and what changed between iterations.
+Claude 스킬이 어떻게 구성되고 다듬어지는지 익히는 과정에서, 실제 Notion 워크스페이스에 두고 반복해서 만들고 시험했습니다. 업무를 등록하고, 수정하고, 보류했다가 재개하고, 끝까지 완료 처리하는 흐름을 실제로 돌려봤습니다. 그 과정에서의 설계 판단과 버전 간 변경 사항은 함께 쓴 블로그 글에 정리했습니다.
 
-## Install
+## 설치
 
-This is a Cowork/Claude skill package (`.skill` = a zip of this folder). To use it:
-1. Open the `.skill` file in Cowork and click "Save skill", or
-2. Copy this folder into your skills directory if you're running Claude Code / the Agent SDK directly.
+Cowork/Claude 스킬 패키지입니다 (`.skill` 파일 = 이 폴더를 압축한 것). 사용하려면:
+
+1. Cowork에서 `.skill` 파일을 열고 "스킬 저장"을 누르거나,
+2. Claude Code / Agent SDK를 직접 쓰고 있다면 이 폴더를 스킬 디렉터리에 복사하세요.
