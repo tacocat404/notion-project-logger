@@ -31,7 +31,7 @@ This is the same principle as not hardcoding IDs, applied one level up: a copy t
 
 | property | what varies |
 |---|---|
-| 진행 상황 | the stage list. A fresh copy starts with 시작 전👀 / 기획 중📝 / 진행 중🏃‍♀️ / 보류⛔ / 완료👍 |
+| 진행 상황 | the stage list. A fresh copy starts with 시작 전👀 / 기획 중📝 / 진행 중🏃‍♀️ / 보류⛔ — **no completion stage**, because done is the `완료` checkbox alone (one way to say done, so the two can't disagree) |
 | 목표 | the option list, **and therefore the 자료실 folder set** (they stay 1:1). A fresh copy starts with 📖ㅣ학습 / 📋ㅣ기획 / 🔎ㅣ조사 / 💻ㅣ구현 / 💀ㅣ수정 / 🥵ㅣ테스트 및 검증 |
 | 중요도 | a fresh copy starts with ⭐⭐⭐⭐⭐ / ⭐⭐⭐ / ⭐ |
 | project-specific properties | a project may add its own (e.g. a 회차-style property for repeated stages). Whatever exists is documented in that project's guide |
@@ -87,7 +87,11 @@ Personal folder names may be real names or nicknames — use whatever the person
 
 ## Views
 
-A fresh copy has table / board (grouped by 진행 상황) / calendar (by 날짜) views, plus a 이번 주 할 일 view grouped by 중요도. The default view should sort `완료` unchecked-first so finished work settles to the bottom.
+A fresh copy has table / board (grouped by 진행 상황) / calendar (by 날짜) views, plus a 이번 주 할 일 view grouped by 중요도.
+
+**All four hide completed tasks** (`FILTER "완료" = false`), and the project page carries one extra section at the bottom showing only completed ones (`FILTER "완료" = true`). Checking the box moves a task from the working screens to that section.
+
+Filter DSL note: write `= true` / `= false` for checkboxes. Passing `"__YES__"` silently produces the *opposite* filter (`checkbox_is_not true`) — that string form belongs to SQL queries, not view configuration.
 
 ---
 

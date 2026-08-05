@@ -93,16 +93,15 @@ Three kinds of "update" go to three different places. Don't conflate them.
 
 ## Workflow 3: Complete a 업무 (the wrap-up ritual)
 
-The guide marks this "제일 중요". All four steps, in order, **as one unit** — do not stop partway:
+The guide marks this "제일 중요". Do the write-up first, then mark it done — never the reverse, and never the marking alone:
 
 1. **Ask the user for the actual 결과 & 인사이트** — what came out of it, what they'd do differently. This is their reflection and judgment; a plausible paragraph you generated is not the same thing even if it reads well. Draft a starting point from the conversation and offer it, but don't post it as their insight without sign-off.
 2. **If there's an output, file it and link it.** Create it inside the matching *shared* 자료실 folder — the one matching this task's `목표` in the project's current mapping — titled `YYYY-MM-DD 주제`, then link it from the task body with an @-mention. Filing without linking defeats the point; the guide is explicit that creation and linking are one set.
-3. Move `진행 상황` to the guide's completion stage (`완료👍`).
-4. Check the `완료` checkbox.
+3. **Mark it done the way this project marks done.** Read that from the guide rather than assuming — don't hardcode a stage name or a property here. In the standard template this is the `완료` checkbox, and `진행 상황` has no completion stage at all; a project that kept one would need both moved together.
 
-**Steps 3 and 4 must not come apart.** A task with `완료` checked but `진행 상황` still on `보류⛔` sits on the board looking like blocked work — a worse state than not having checked it. This has actually happened on this template.
+**Why the guide is authoritative on step 3:** when a project offers two ways to say "done" (a completion stage *and* a checkbox), they drift apart — a task ends up checked while its stage still reads `보류⛔`, so the board shows finished work as blocked. That actually happened on this template, which is why the standard guide now has exactly one. If a project you're in still has both, set both, and consider raising the redundancy at the next upgrade (Workflow 7).
 
-A task marked done with an empty write-up and no artifact is precisely the record this whole template exists to prevent, so don't treat 1–2 as optional even when the user only asked you to "check it off". Completion is also a Workflow 5 checkpoint — offer to fold the session's accumulated personal notes into that person's folder at the same time, as a separate step from the shared 결과 & 인사이트.
+A task marked done with an empty write-up and no artifact is precisely the record this whole template exists to prevent, so don't treat 1–2 as optional even when the user only asked you to "check it off" — checking takes a second, but steps 1–2 are the part that's still there months later. Completion is also a Workflow 5 checkpoint — offer to fold the session's accumulated personal notes into that person's folder at the same time, as a separate step from the shared 결과 & 인사이트.
 
 **Shared vs personal, restated:** an official deliverable tied to a registered 업무 goes in the shared folder, always — never in someone's personal folder just because one person did the work. Personal folders hold what an individual keeps for themselves.
 
@@ -118,7 +117,7 @@ A task marked done with an empty write-up and no artifact is precisely the recor
 2. Create the 자료실:
    - one shared "문서 폴더(전체가 읽어야하는 것)" containing one sub-folder per `목표` value agreed in Workflow 0 — **generated from that list, not from a fixed six**
    - one personal folder per member, titled with the name they gave, each containing the three standard sub-pages: **공부한 내용 / 대회 과정 / 업무 및 대화 로그** (see Workflow 5)
-3. Set the 업무 DB's default view to sort `완료` (unchecked first), then `진행 상황`, then `날짜`, so completed work settles to the bottom as it accumulates. This is a view sort, so it maintains itself — you don't re-sort anything later. If the team already has their own views set up, propose this as an addition rather than overwriting what they built.
+3. **Keep finished work out of the working screens.** Filter every day-to-day view (task list, board, this-week, calendar) to hide completed tasks, and add one section at the bottom of the project page showing only the completed ones. Filters maintain themselves — nothing to re-sort later. Sorting alone isn't enough: on a long project the finished items still fill the screen and push the live work out of sight. If the team already built their own views, propose this as an addition rather than overwriting what they have.
 4. Register any initial 업무 via Workflow 1.
 5. Confirm back what was created, so a typo'd name or wrong task gets caught immediately.
 

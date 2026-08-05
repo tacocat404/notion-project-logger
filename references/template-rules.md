@@ -24,7 +24,9 @@ One database (업무) holds everything; the different screens (등록 / 보드 /
 
 ## Stages and categories (starting values — verify against the project's guide)
 
-진행 상황, in order: 시작 전👀 (default for new tasks) → 기획 중📝 → 진행 중🏃‍♀️ → 완료👍, with 보류⛔ branching off 진행 중 and returning to it once unblocked. **Moving to 보류⛔ requires a one-line reason in the body** — an unexplained hold blocks teammates from helping.
+진행 상황, in order: 시작 전👀 (default for new tasks) → 기획 중📝 → 진행 중🏃‍♀️, with 보류⛔ branching off 진행 중 and returning to it once unblocked. **Moving to 보류⛔ requires a one-line reason in the body** — an unexplained hold blocks teammates from helping.
+
+There is deliberately **no completion stage**: done is the `완료` checkbox and nothing else. Two ways to mark done drift apart (checked box, stage still on 보류⛔), and that misrecord actually occurred before this was collapsed to one.
 
 목표 ↔ 자료실 folder mapping (also the criteria for choosing one):
 
@@ -58,10 +60,9 @@ Per SKILL.md Workflow 2, entries here are written by people. The skill reminds b
 
 1. Write 결과 & 인사이트 in the task body.
 2. If there's an output artifact, create it in the matching 자료실 folder titled `YYYY-MM-DD 주제` (e.g. "2026-08-04 온보딩 체크리스트 초안"), then link it from the task body via `@`-mention. A doc that isn't linked back becomes nearly unfindable — creating it isn't enough on its own.
-3. Move 진행 상황 to 완료👍.
-4. Check 완료.
+3. Check 완료. The task then disappears from the working screens and appears in the 완료된 업무 section at the bottom of the project page.
 
-All four, as one unit. Skipping 1–2 because "it's just a checkbox" defeats the purpose of the template; doing 4 without 3 leaves the task sitting on the board as if it were still blocked.
+Skipping 1–2 because "it's just a checkbox" defeats the purpose of the template. Checking takes a second; steps 1–2 are the part still worth something months later.
 
 ## Other operating rules
 
